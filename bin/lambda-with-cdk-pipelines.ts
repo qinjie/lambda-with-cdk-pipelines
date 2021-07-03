@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import "source-map-support/register";
 import * as cdk from "@aws-cdk/core";
-import { LambdaPythonStack } from "../lib/lambda-python-stack";
+import { LambdaAlphaStack } from "../lib/lambda-a-stack";
 import { PipelineStack } from "../lib/pipeline-stack";
 
 const APP_NAME = "LambdaWithCdkPipeline";
