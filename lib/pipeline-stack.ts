@@ -24,6 +24,7 @@ export class PipelineStack extends cdk.Stack {
     const synthAction = pipelines.SimpleSynthAction.standardNpmSynth({
       sourceArtifact,
       cloudAssemblyArtifact,
+      installCommand: "npm install --include=dev",
       buildCommand: "npm run build",
       environment: {
         privileged: true,
