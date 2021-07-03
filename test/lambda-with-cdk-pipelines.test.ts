@@ -9,10 +9,7 @@ import * as LambdaWithCdkPipelines from "../lib/pipeline-stack";
 test("Empty Stack", () => {
   const app = new cdk.App();
   // WHEN
-  const stack = new LambdaWithCdkPipelines.LambdaWithCdkPipelinesStack(
-    app,
-    "MyTestStack"
-  );
+  const stack = new LambdaWithCdkPipelines.PipelineStack(app, "MyTestStack");
   // THEN
   expectCDK(stack).to(
     matchTemplate(

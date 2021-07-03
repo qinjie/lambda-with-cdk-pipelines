@@ -2,8 +2,9 @@ import * as codepipeline from "@aws-cdk/aws-codepipeline";
 import * as codepipeline_actions from "@aws-cdk/aws-codepipeline-actions";
 import * as cdk from "@aws-cdk/core";
 import * as pipelines from "@aws-cdk/pipelines";
+import { LambdaPythonStage } from "./lambda-python-stage";
 
-export class MainCdkPipelineStack extends cdk.Stack {
+export class PipelineStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
@@ -39,5 +40,12 @@ export class MainCdkPipelineStack extends cdk.Stack {
       /* Diable mutating when developing pipeline only */
       // selfMutating: false,
     });
+
+    const lambdaApp = new LambdaPythonStage(this, "LambdaApp");
+    const stageDev = pipeline.addStage("dev");
+    // Add one or more application stage
+    stageDev.addApplication(lambdaApp);
+
+    pipeline.stackOutput(lambdaApp.output);
   }
 }
