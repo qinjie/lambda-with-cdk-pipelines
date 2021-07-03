@@ -1,14 +1,8 @@
-# Welcome to your CDK TypeScript project!
+# Lambda CD with CDK Pipelines
 
-This is a blank project for TypeScript development with CDK.
+This project uses AWS CDK Pipelines to create pipelines and deploy multiple lambda functions.
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+After project is deployed in AWS, a new commits in GitHub repo's master branch will trigger AWS codepipeline to self-mutate pipeline and deploy lambda function. 
 
-## Useful commands
+This project illustrates deployment of 2 lambda functions. Environment variables defined in `.env` file for each lambda is added to respective lambda function too. 
 
- * `npm run build`   compile typescript to js
- * `npm run watch`   watch for changes and compile
- * `npm run test`    perform the jest unit tests
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk synth`       emits the synthesized CloudFormation template
