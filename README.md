@@ -1,4 +1,4 @@
-# Lambda CD with CDK Pipelines
+# Lambda with CDK Pipelines
 
 This project uses AWS CDK Pipelines to create pipelines and deploy multiple lambda functions.
 
