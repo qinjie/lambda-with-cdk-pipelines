@@ -3,8 +3,7 @@ import * as codepipeline_actions from "@aws-cdk/aws-codepipeline-actions";
 import * as cdk from "@aws-cdk/core";
 import { Action } from "@aws-cdk/aws-codepipeline";
 import * as pipelines from "@aws-cdk/pipelines";
-import { LambdaAlphaStage } from "./lambda-a-stage";
-import { LambdaBetaStage } from "./lambda-b-stage";
+import { LambdaStage } from "./lambda-stage";
 
 export class PipelineStack extends cdk.Stack {
   repo_owner: string = process.env.REPO_OWNER!;
@@ -58,9 +57,7 @@ export class PipelineStack extends cdk.Stack {
     // Add one or more application stage
     const stageDev = pipeline.addStage("dev");
 
-    const lambdaAlpha = new LambdaAlphaStage(this, "LambdaAlpha");
-    const lambdaBeta = new LambdaBetaStage(this, "LambdaBeta");
-    stageDev.addApplication(lambdaAlpha);
-    stageDev.addApplication(lambdaBeta);
+    const lambdaStage = new LambdaStage(this, "LambdaAlpha");
+    stageDev.addApplication(lambdaStage);
   }
 }
