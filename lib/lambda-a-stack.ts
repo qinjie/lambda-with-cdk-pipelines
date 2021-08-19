@@ -3,18 +3,41 @@ import * as lambda from "@aws-cdk/aws-lambda";
 import * as lambda_python from "@aws-cdk/aws-lambda-python";
 import * as path from "path";
 import * as dotenv from "dotenv";
+import { Construct } from "@aws-cdk/core";
+import { IFunction } from "@aws-cdk/aws-lambda";
 
 export class LambdaAlphaStack extends cdk.Stack {
   output: cdk.CfnOutput;
+  lambdaFunction: IFunction;
 
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
-    super(scope, id, props);
+  // Update Lambda Function Definition here
+  /* TO BE UPDATED - START */
+  lambda_src_folder = "../src/lambda-alpha";
+  name: string;
 
-    const entry_path = "../lambda/app-alpha";
+  private getLambdaFunction(
+    scope: Construct,
+    env_values: { [key: string]: string } | undefined
+  ): IFunction {
+    const props = {
+      entry: path.join(__dirname, this.lambda_src_folder),
+      index: "main.py",
+      handler: "handler",
+      runtime: lambda.Runtime.PYTHON_3_8,
+      memorySize: 256,
+      timeout: cdk.Duration.seconds(10),
+      environment: env_values,
+    };
 
-    // Load .env into dictionary
+    const f = new lambda_python.PythonFunction(scope, this.name, props);
+    return f;
+  }
+  /* TO BE UPDATED - END */
+
+  // Load .env into dictionary for lambda function
+  private loadEnv() {
     const env = dotenv.config({
-      path: path.join(__dirname, entry_path, ".env"),
+      path: path.join(__dirname, this.lambda_src_folder, ".env"),
     });
     if (env.error) {
       throw env.error;
@@ -22,19 +45,17 @@ export class LambdaAlphaStack extends cdk.Stack {
     const env_values = {
       ...env.parsed,
     };
+    return env_values;
+  }
 
-    const func = new lambda_python.PythonFunction(this, "FunctionAlpha", {
-      entry: path.join(__dirname, entry_path),
-      index: "main.py",
-      handler: "handler",
-      runtime: lambda.Runtime.PYTHON_3_8,
-      memorySize: 256,
-      timeout: cdk.Duration.seconds(10),
-      environment: env_values,
-    });
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+    super(scope, id, props);
 
-    this.output = new cdk.CfnOutput(this, "FunctionAlphaName", {
-      value: func.functionName,
+    const env_values = this.loadEnv();
+    this.name = id;
+    this.lambdaFunction = this.getLambdaFunction(this, env_values);
+    this.output = new cdk.CfnOutput(this, `${this.name}_FunctionName`, {
+      value: this.lambdaFunction.functionName,
     });
   }
 }
